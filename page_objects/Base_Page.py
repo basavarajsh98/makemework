@@ -294,6 +294,13 @@ class Base_Page(Borg,unittest.TestCase):
 
         return result_flag
 
+    def switch_frame(self, name=None):
+        "Make the driver switch to the last frame or a frame with a name"
+        result_flag = True
+        frame_handle_id = self.driver.find_elements_by_tag_name(name)[0]
+        self.driver.switch_to.frame(frame_handle_id)
+        return result_flag
+
 
     def close_current_window(self):
         "Close the current window"
