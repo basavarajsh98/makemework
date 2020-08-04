@@ -3,7 +3,8 @@ This module models the payment page on weather shopper
 """
 from .Base_Page import Base_Page
 from utils.Wrapit import Wrapit
-import conf.locators_conf as locators 
+import conf.locators_conf as locators
+import random
 
 class Payment_Page(Base_Page):
 
@@ -29,6 +30,11 @@ class Payment_Page(Base_Page):
             negative="%s is an invalid email-id"%email)
         return result_flag
 
+    def generate_email(self):
+        number=random.randrange(0,100,1)
+        email=f"Internship_day_{number}@qxf2.com"
+        return email
+
     def click_pay_button(self):
         "Click on the pay button"
         result_flag = self.click_element(self.PAY_BUTTON)
@@ -39,7 +45,8 @@ class Payment_Page(Base_Page):
         negative="Could not click on the pay button. Failed to redirect to confiramtion page")
         return result_flag
 
-    def pay_details(self,email,credit_card,valid_till,cvc,zipc,remember,mobile):
+    def pay_details(self,credit_card,valid_till,cvc,zipc,remember,mobile):
+        email=self.generate_email()
         self.set_text(self.EMAIL, email)
         result_flag=self.verify_email(email)
         self.set_text(self.CREDIT_CARD, credit_card)
