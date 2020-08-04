@@ -85,7 +85,8 @@ def test_e2e_weather_shopper(base_url,browser,browser_version,os_version,os_name
         level="critical")
 
         #fill in the details to make payment
-        result_flag=test_obj.pay_details("qxf2July20200@gmail.com","4242424242424242", "0424",
+        ## pay_details(credit_card_number, expiry_date, CVC, zipcode, remember, mobile):
+        result_flag=test_obj.pay_details("4242424242424242", "0424",
                                          "425", "560054","Y","7896541236")
         test_obj.log_result(result_flag,
         positive="Great! Payment Success!",
