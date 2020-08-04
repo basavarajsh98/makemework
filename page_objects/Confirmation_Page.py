@@ -1,5 +1,5 @@
 """
-This module models the Confirmation page
+This module models the Checkout page
 URL: /sunscreen
 """
 from .Base_Page import Base_Page
