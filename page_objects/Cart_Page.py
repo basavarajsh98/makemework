@@ -15,6 +15,8 @@ class Cart_Page(Base_Page):
     CART_TOTAL = locators.CART_TOTAL
     COL_NAME = 0
     COL_PRICE = 1 
+    EMAIL=locators.EMAIL
+    PAY_WITH_CARD=locators.PAY_WITH_CARD
 
     def start(self):
         "Override the start method of base"
@@ -147,3 +149,14 @@ class Cart_Page(Base_Page):
         if result_flag:
             result_flag &= self.verify_missing_item(expected_cart,actual_cart)
         return result_flag 
+
+    def click_pay_with_card_button(self):
+        "Click on the pay with card button"
+        result_flag = self.click_element(self.PAY_WITH_CARD)
+        if result_flag:
+            self.switch_page("payment")
+        self.conditional_write(result_flag,
+        positive="Clicked on the pay with card button to pay",
+        negative="Could not click on the pay with card to pay")
+        return result_flag
+        
