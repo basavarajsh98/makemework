@@ -82,7 +82,7 @@ class Product_Object():
     def get_minimum_priced_product(self,filter_condition):
         "Return the least expensive item based on a filter condition"
         minimum_priced_product = None 
-        min_price = 10000000
+        min_price = 1000000
         min_name = ''
         all_products = self.get_all_products_on_page()
         for product in all_products:
@@ -91,13 +91,13 @@ class Product_Object():
                     minimum_priced_product = product
                     min_price = product.price
                     min_name = product.name
-        result_flag = True if minimum_priced_product is not None else False
+        result_flag = True if minimum_priced_product is not None else False 
         self.conditional_write(result_flag,
         positive="Min price for product with '%s' is %s with price %d"%(filter_condition,min_name,min_price),
         negative="Could not obtain the cheapest product with the filter condition '%s'\nCheck the screenshots to see if there was at least one item that satisfied the filter condition."%filter_condition)
 
         return minimum_priced_product
-
+            
     def click_add_product_button(self,product_name):
         "Click on the add button corresponding to the name"
         result_flag = self.click_element(self.ADD_PRODUCT_BUTTON%product_name)
@@ -123,10 +123,10 @@ class Product_Object():
 
     def add_product(self,product_name):
         "Add the lowest priced product with the filter condition in name"
-        before_cart_quantity = self.get_current_cart_quantity()
+        before_cart_quantity = self.get_current_cart_quantity() 
         result_flag = self.click_add_product_button(product_name)
         after_cart_quantity = self.get_current_cart_quantity()
-        result_flag &= True if after_cart_quantity - before_cart_quantity == 1 else False
+        result_flag = True if after_cart_quantity - before_cart_quantity == 1 else False
 
         return result_flag
 

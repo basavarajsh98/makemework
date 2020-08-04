@@ -40,7 +40,7 @@ class Cart_Page(Base_Page):
             item = []
             for col in column_elements:
                 text = self.get_dom_text(col)
-            item.append(text.decode('ascii'))
+                item.append(text.decode('ascii'))
             item = self.process_item(item)
             cart_items.append(item)
 
@@ -58,7 +58,7 @@ class Cart_Page(Base_Page):
     
     def verify_extra_items(self,expected_cart,actual_cart):
         "Items which exist in actual but not in expected"
-        item_match_flag = False 
+        item_match_flag = True 
         for item in actual_cart:
             #Does the item exist in the product list
             found_flag = False 
@@ -106,6 +106,8 @@ class Cart_Page(Base_Page):
             self.conditional_write(price_match_flag,
             positive="... the expected price matched to %d"%product.price,
             negative="... the expected price did not match. Expected: %d but Obtained: %d"%(product.price,actual_price)) 
+            
+            item_match_flag &= found_flag and price_match_flag
 
         return item_match_flag
 
@@ -125,7 +127,7 @@ class Cart_Page(Base_Page):
         "Verify the total in the cart"
         expected_total = 0
         for product in expected_cart:
-            expected_total = product.price 
+            expected_total = expected_total + product.price 
         actual_total = self.get_total_price()
         result_flag = actual_total == expected_total
         self.conditional_write(result_flag,
@@ -142,5 +144,6 @@ class Cart_Page(Base_Page):
         if result_flag is False:
             result_flag &= self.verify_missing_item(expected_cart,actual_cart)
         result_flag &= self.verify_cart_total(expected_cart)
-
+        if result_flag:
+            result_flag &= self.verify_missing_item(expected_cart,actual_cart)
         return result_flag 
