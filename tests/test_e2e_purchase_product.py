@@ -28,18 +28,18 @@ def test_e2e_weather_shopper(base_url,browser,browser_version,os_version,os_name
 
         #Setup and register a driver
         start_time = int(time.time())	#Set start_time with current time
-        test_obj.register_driver(remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name)  
+        test_obj.register_driver(remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name)
 
         #Read the temperature
         temperature = test_obj.get_temperature()
         result_flag = False
         if type(temperature) == int:
-            result_flag = True 
+            result_flag = True
         test_obj.log_result(result_flag,
         positive="Obtained the temperature from the landing page",
         negative="Could not to parse the temperature on the landing page.",
         level="critical")
-        
+
         #Choose the right product type
         product_type = ""
         if temperature <= 18:
@@ -73,8 +73,23 @@ def test_e2e_weather_shopper(base_url,browser,browser_version,os_version,os_name
         #Verify the products displayed on the cart page
         result_flag = test_obj.verify_cart(product_list)
         test_obj.log_result(result_flag,
-        positive="Something wrong with the cart. The log messages above will have the details",
+        positive="Cart looks great! Go ahead.",
         negative="Something wrong with the cart. The log messages above will have the details",
+        level="critical")
+
+        #go to payment frame
+        result_flag=test_obj.click_pay_with_card_button()
+        test_obj.log_result(result_flag,
+        positive="Automation is on payment frame.",
+        negative="Oops! Something went wrong",
+        level="critical")
+
+        #fill in the details to make payment
+        result_flag=test_obj.pay_details("qxf2July20200@gmail.com","4242424242424242", "0424",
+                                         "425", "560054","Y","7896541236")
+        test_obj.log_result(result_flag,
+        positive="Great! Payment Success!",
+        negative="Oops! Payment Failed!",
         level="critical")
 
         #Print out the results
@@ -83,25 +98,25 @@ def test_e2e_weather_shopper(base_url,browser,browser_version,os_version,os_name
         #Teardown
         test_obj.wait(3)
         expected_pass = test_obj.result_counter
-        actual_pass = test_obj.past_counter
+        actual_pass = test_obj.pass_counter
         test_obj.teardown()
-        
+
     except Exception as e:
         print("Exception when trying to run test:%s"%__file__)
         print("Python says:%s"%repr(e))
 
     assert expected_pass == actual_pass, "Test failed: %s"%__file__
-       
-    
-#---START OF SCRIPT   
+
+
+#---START OF SCRIPT
 if __name__=='__main__':
     print("Start of %s"%__file__)
     #Creating an instance of the class
     options_obj = Option_Parser()
     options = options_obj.get_options()
-                
+
     #Run the test only if the options provided are valid
-    if options_obj.check_options(options): 
+    if options_obj.check_options(options):
         test_e2e_weather_shopper(base_url=options.url,
                         browser=options.browser,
                         browser_version=options.browser_version,
@@ -112,7 +127,7 @@ if __name__=='__main__':
                         tesults_flag=options.tesults_flag,
                         test_run_id=options.test_run_id,
                         remote_project_name=options.remote_project_name,
-                        remote_build_name=options.remote_build_name) 
+                        remote_build_name=options.remote_build_name)
     else:
-        print('ERROR: Received incorrect comand line input arguments')
+        print('ERROR: Received incorrect command line input arguments')
         print(option_obj.print_usage())
